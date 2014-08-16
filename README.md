@@ -23,6 +23,8 @@ password: 'password'
 
 Remember to quote your any of the values if necessary (if your password begins with `{` for example).
 
+If you use two-pass authentication, you should [set up an API key](https://github.com/settings/applications) and use that as your password instead.
+
 # Running
 
 Running the utility is simple. Just run `sync-github-forks`.
