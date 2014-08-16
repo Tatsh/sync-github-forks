@@ -108,8 +108,6 @@ if __name__ == '__main__':
 
     logger.info('Login: %s' % user.login)
 
-    error_messages = []
-
     for repo in user.get_repos():
         if not repo.fork:
             logger.debug('Repository "%s" is not a fork' % repo.full_name)
@@ -179,5 +177,3 @@ if __name__ == '__main__':
         # Push!
         print('Pushing "%s" branch to fork "%s"' % (parent.default_branch, repo.full_name,))
         git(['push', '-u', 'origin', parent.default_branch], _cwd=target_dir)
-
-    [print(x) for x in error_messages]
