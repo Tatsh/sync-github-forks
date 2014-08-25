@@ -31,8 +31,14 @@ class Configuration:
             if key not in self.config:
                 raise ConfigurationError(key_missing_format % key)
 
+        if 'blacklisted_forks' not in self.config:
+            self.config['blacklisted_forks'] = []
+
     def get_user(self):
         return self.config['username']
 
     def get_password(self):
         return self.config['password']
+
+    def is_blacklisted(self, repo_name):
+        return repo_name in self.config['blacklisted_forks']

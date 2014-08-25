@@ -25,7 +25,11 @@ EXAMPLE_CONFIG_FILE = '''Example file:
 
 ---
 username: mygithubusername
-password: apassword1'''
+password: apassword1
+
+# For forks so diverged they are nearly impossible to merge
+# Full names (e.g. myname/myproject)
+blacklisted_forks: []'''
 
 # FIXME Can't get .bake() to accept multiple arguments
 #git_add_upstream = git.bake(['remote', 'add', 'upstream'])
@@ -115,6 +119,10 @@ if __name__ == '__main__':
     for repo in user.get_repos():
         if not repo.fork:
             logger.debug('Repository "%s" is not a fork' % repo.full_name)
+            continue
+
+        if config.is_blacklisted(repo.full_name):
+            logger.debug('Repository "%s" is blacklisted' % repo.full_name)
             continue
 
         parent = repo.parent
