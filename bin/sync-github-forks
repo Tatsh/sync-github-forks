@@ -43,7 +43,7 @@ def git_pull_ff(_cwd=None):
 
 
 def git_clone(url, target_dir):
-    git(['clone', '--depth=1', url, target_dir])
+    git(['clone', url, target_dir])
 
 
 def git_pull(branch, target_dir):
@@ -61,11 +61,15 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--debug',
                         help='Debug mode',
                         action='store_true')
+    parser.add_argument('--stop-on-error',
+                        action='store_true',
+                        help='Stop on first error')
 
     args = parser.parse_args()
     logger = logging.getLogger('ugf')
     cache_dir = path_join(env['HOME'], '.ugf-cache')
     git_checkout = git.bake('checkout -f')
+    stop_on_first_error = args.stop_on_error
 
     if args.verbose:
         logger.setLevel(logging.INFO)
@@ -167,11 +171,13 @@ if __name__ == '__main__':
         logger.info('Merging upstream branch %s' % (parent.default_branch,))
         try:
             git(['merge', 'upstream/%s' % (parent.default_branch,)], _cwd=target_dir)
-        except sh.ErrorReturnCode_1:
-            msg = 'Error merging upstream with "%s". Resolve this manually in a local copy. Probably a merge conflict' % (repo.full_name,)
+        except sh.ErrorReturnCode_1 as e:
+            msg = 'Error merging upstream with "%s". Resolve this manually in a local copy. Probably a merge conflict\nstdout: %s\nstderr: %s' % (repo.full_name, e.stdout, e.stderr)
             print(msg, file=sys.stderr)
             logger.debug('Recursively deleting "%s"' % (target_dir,))
             rmtree(target_dir)
+            if stop_on_first_error:
+                sys.exit(1)
             continue
 
         # Push!
