@@ -19,11 +19,14 @@ To use this you need a simple configuration file in your home directory at `~/.g
 ```yaml
 username: my_user_name
 password: 'password'
+blacklisted_forks: []
 ```
 
 Remember to quote your any of the values if necessary (if your password begins with `{` for example).
 
 If you use two-pass authentication, you should [create an access token](https://github.com/settings/applications) and use that as your password instead.
+
+`blacklisted_forks` is a list of repository full names (e.g. `myname/myproject`) that are forks that should be ignored. This is usually due to too much divergence from the original.
 
 # Running
 
