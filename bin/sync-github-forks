@@ -5,6 +5,7 @@ from os.path import isdir, join as path_join
 from shutil import rmtree
 import argparse
 import logging
+import logging.handlers
 import sys
 
 from github import enable_console_debug_logging, Github
@@ -65,6 +66,9 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--debug',
                         help='Debug mode',
                         action='store_true')
+    parser.add_argument('-s', '--syslog',
+                        help='Log to system log',
+                        action='store_true')
     parser.add_argument('--stop-on-error',
                         action='store_true',
                         help='Stop on first error')
@@ -87,6 +91,11 @@ if __name__ == '__main__':
         formatter = logging.Formatter('%(levelname)s - %(message)s')
 
         ch.setFormatter(formatter)
+        logger.addHandler(ch)
+
+    if args.syslog:
+        ch = logging.handlers.SysLogHandler(address='/dev/log')
+        logger.setLevel(logging.INFO if not args.debug else logging.DEBUG)
         logger.addHandler(ch)
 
     try:
