@@ -9,7 +9,7 @@ requirements = [
 
 setup(
     name='sync-github-forks',
-    version='0.1.1',
+    version='0.1.2',
     author='Andrew Udvare',
     author_email='audvare@gmail.com',
     packages=['ugf'],
