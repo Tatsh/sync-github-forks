@@ -200,3 +200,4 @@ if __name__ == '__main__':
         # Push!
         print('Pushing "%s" branch to fork "%s"' % (parent.default_branch, repo.full_name,))
         git(['push', '-u', 'origin', parent.default_branch], _cwd=target_dir)
+        git(['push', '-u', 'origin', '--tags'], _cwd=target_dir)
